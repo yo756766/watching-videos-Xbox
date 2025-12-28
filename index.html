@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video App - Fixed</title>
+    <style>
+        /* ANIMATIONS */
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        
+        body { font-family: 'Segoe UI', sans-serif; margin: 0; background: #f4f7f6; overflow-x: hidden; }
+
+        /* HEADER */
+        header { 
+            background: linear-gradient(135deg, #cc0000, #ff4444); 
+            color: white; padding: 15px 20px; 
+            display: flex; justify-content: space-between; align-items: center; 
+            position: sticky; top: 0; z-index: 100; 
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2); 
+        }
+        .user-badge { background: rgba(255,255,255,0.2); padding: 5px 15px; border-radius: 20px; font-weight: bold; }
+
+        .container { max-width: 1000px; margin: 20px auto; padding: 10px; }
+        #searchBar { width: 100%; padding: 15px; border-radius: 30px; border: 2px solid #ddd; font-size: 16px; margin-bottom: 25px; outline: none; }
+
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
+
+        /* CARD STYLE */
+        .card { 
+            background: white; border-radius: 15px; overflow: hidden; 
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05); cursor: pointer; 
+            transition: transform 0.2s;
+            animation: slideUp 0.5s ease forwards;
+            opacity: 0;
+        }
+        .card:hover { transform: scale(1.02); }
+
+        /* THUMBNAIL CONTAINER */
+        .vid-thumb-box {
+            width: 100%;
+            height: 180px;
+            background: #000;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        /* Video acting as Image */
+        .static-video { 
+            width: 100%; 
+            height: 100%; 
+            object-fit: cover; 
+        }
+
+        /* Play Icon Overlay */
+        .play-icon {
+            position: absolute;
+            font-size: 40px;
+            color: rgba(255, 255, 255, 0.8);
+            pointer-events: none;
+        }
+        
+        .info { padding: 15px; }
+        .info h3 { margin: 0 0 10px; font-size: 16px; color: #333; }
+        .info small { color: #777; }
+
+        /* MODALS */
+        #nameModal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 300; display: flex; justify-content: center; align-items: center; }
+        .name-box { background: white; padding: 30px; border-radius: 10px; text-align: center; }
+        .name-box input { padding: 10px; margin: 15px 0; border: 1px solid #ccc; width: 80%; }
+        .name-box button { padding: 10px 20px; background: #cc0000; color: white; border: none; cursor: pointer; }
+
+        /* PLAYER SCREEN */
+        #playerScreen { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: white; z-index: 200; overflow-y: auto; animation: fadeIn 0.3s; }
+        .player-content { max-width: 850px; margin: auto; padding: 20px; }
+        
+        video#mainVideo { width: 100%; aspect-ratio: 16/9; background: black; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
+
+        .back-btn { background: #eee; border: none; padding: 10px 20px; border-radius: 30px; margin-bottom: 15px; font-weight: bold; cursor: pointer; }
+
+        /* OPTIONS */
+        .three-options { display: flex; justify-content: space-around; background: white; padding: 15px; border-radius: 15px; margin: 20px 0; border: 1px solid #f0f0f0; box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
+        .opt-btn { background: none; border: none; cursor: pointer; display: flex; flex-direction: column; align-items: center; color: #666; }
+        .opt-btn span { font-size: 24px; margin-bottom: 5px; }
+        .opt-btn.liked { color: #cc0000; font-weight: bold; }
+
+        /* COMMENTS */
+        .comments-section { margin-top: 20px; border-top: 1px solid #eee; padding-top: 20px; }
+        .c-box { display: flex; gap: 10px; }
+        .c-box input { flex: 1; padding: 12px; border: 2px solid #eee; border-radius: 30px; }
+        .c-box button { background: #007bff; color: white; border: none; padding: 0 25px; border-radius: 30px; cursor: pointer; }
+        #commentList { list-style: none; padding: 0; margin-top: 20px; }
+        #commentList li { background: white; padding: 15px; margin-bottom: 10px; border-radius: 10px; border-left: 4px solid #cc0000; box-shadow: 0 2px 5px rgba(0,0,0,0.03); }
+        .c-user { font-weight: bold; color: #333; margin-right: 5px; }
+    </style>
+</head>
+<body>
+
+    <div id="nameModal">
+        <div class="name-box">
+            <h3>Welcome!</h3>
+            <p>Enter your name:</p>
+            <input type="text" id="userNameInput" placeholder="Name">
+            <button onclick="saveName()">Enter</button>
+        </div>
+    </div>
+
+    <header>
+        <h3>▶ Video App</h3>
+        <div id="displayUser" class="user-badge">Guest</div>
+    </header>
+
+    <div class="container">
+        <input type="text" id="searchBar" placeholder="🔍 Search videos...">
+        <div class="grid" id="videoGrid">Loading...</div>
+    </div>
+
+    <!-- PLAYER -->
+    <div id="playerScreen">
+        <div class="player-content">
+            <button class="back-btn" onclick="closePlayer()">← Back</button>
+            
+            <video id="mainVideo" controls autoplay></video>
+            <h2 id="vidTitle" style="margin-top:15px;"></h2>
+
+            <div class="three-options">
+                <button class="opt-btn" id="likeBtn" onclick="toggleLike()">
+                    <span>❤️</span> <div id="likeLabel">Like</div>
+                </button>
+                <button class="opt-btn" onclick="openRating()">
+                    <span>⭐</span> <div>Waiting</div>
+                </button>
+                <button class="opt-btn" onclick="focusComment()">
+                    <span>💬</span> <div>Comment</div>
+                </button>
+            </div>
+
+            <div id="ratingBox" style="display:none; text-align:center; margin-bottom:15px;">
+                <select onchange="submitRating(this)" style="padding:10px; border-radius:10px;">
+                    <option value="0">Select Stars...</option>
+                    <option value="1">1 Star</option>
+                    <option value="2">2 Stars</option>
+                    <option value="3">3 Stars</option>
+                    <option value="4">4 Stars</option>
+                    <option value="5">5 Stars</option>
+                </select>
+            </div>
+
+            <div class="comments-section">
+                <h3>Comments</h3>
+                <div class="c-box">
+                    <input type="text" id="cInput" placeholder="Write a comment...">
+                    <button onclick="addComment()">Post</button>
+                </div>
+                <ul id="commentList"></ul>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+        import { getDatabase, ref, onValue, push, runTransaction } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyCNCdgG86PPRKRugijbN-SavZsih81G-tE",
+            authDomain: "video-b451b.firebaseapp.com",
+            databaseURL: "https://video-b451b-default-rtdb.firebaseio.com",
+            projectId: "video-b451b",
+            storageBucket: "video-b451b.appspot.com",
+            messagingSenderId: "12615852266",
+            appId: "1:12615852266:web:00b659225e67133436f793"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+
+        let allVideos = [];
+        let currentVid = null;
+        let currentUser = localStorage.getItem('chatUserName');
+
+        if (currentUser) {
+            document.getElementById('nameModal').style.display = 'none';
+            document.getElementById('displayUser').innerText = currentUser;
+        } else {
+            document.getElementById('nameModal').style.display = 'flex';
+        }
+
+        window.saveName = () => {
+            const name = document.getElementById('userNameInput').value.trim();
+            if (name) {
+                localStorage.setItem('chatUserName', name);
+                currentUser = name;
+                document.getElementById('nameModal').style.display = 'none';
+                document.getElementById('displayUser').innerText = name;
+                runTransaction(ref(db, 'app_stats/visits'), (v) => (v || 0) + 1);
+            }
+        };
+
+        // LOAD VIDEOS (Crash Fixed)
+        const grid = document.getElementById('videoGrid');
+        onValue(ref(db, 'videos'), (snap) => {
+            grid.innerHTML = "";
+            const data = snap.val();
+            allVideos = [];
+            if(data) {
+                Object.keys(data).forEach(key => {
+                    let v = data[key]; v.id = key; allVideos.push(v);
+                });
+                renderVideos(allVideos);
+            } else { grid.innerHTML = "<p style='text-align:center'>No videos found.</p>"; }
+        });
+
+        function renderVideos(list) {
+            grid.innerHTML = "";
+            list.forEach((v, index) => {
+                const div = document.createElement('div');
+                div.className = "card";
+                div.style.animationDelay = `${index * 0.1}s`;
+                div.onclick = () => openPlayer(v);
+                
+                let r = v.ratingCount ? (v.ratingTotal/v.ratingCount).toFixed(1) : 0;
+                
+                // CRASH FIX: Removed 'onmouseover' play logic.
+                // Added '#t=0.5' to get frame at 0.5s for thumbnail.
+                div.innerHTML = `
+                    <div class="vid-thumb-box">
+                        <video src="${v.videoUrl}#t=0.5" class="static-video" preload="metadata" muted></video>
+                        <div class="play-icon">▶</div>
+                    </div>
+                    <div class="info">
+                        <h3>${v.title}</h3>
+                        <small>❤️ ${v.likes||0} | ⭐ ${r}</small>
+                    </div>`;
+                grid.appendChild(div);
+            });
+        }
+        
+        document.getElementById('searchBar').addEventListener('input', (e) => {
+            renderVideos(allVideos.filter(v => v.title.toLowerCase().includes(e.target.value.toLowerCase())));
+        });
+
+        // PLAYER
+        window.openPlayer = (v) => {
+            currentVid = v;
+            document.getElementById('playerScreen').style.display = 'block';
+            document.getElementById('mainVideo').src = v.videoUrl;
+            document.getElementById('vidTitle').innerText = v.title;
+            
+            checkLike(v.id, v.likes||0);
+            document.getElementById('ratingBox').style.display = 'none';
+            loadComments(v.id);
+        };
+
+        window.closePlayer = () => {
+            document.getElementById('playerScreen').style.display = 'none';
+            document.getElementById('mainVideo').pause();
+            currentVid = null;
+        };
+
+        // LIKE, RATE, COMMENT (Logic Same)
+        function checkLike(id, count) {
+            const btn = document.getElementById('likeBtn');
+            const lbl = document.getElementById('likeLabel');
+            const list = JSON.parse(localStorage.getItem('likedList') || "[]");
+            if(list.includes(id)) {
+                btn.classList.add('liked');
+                lbl.innerText = `Liked (${count})`;
+            } else {
+                btn.classList.remove('liked');
+                lbl.innerText = `Like (${count})`;
+            }
+        }
+
+        window.toggleLike = () => {
+            if(!currentVid) return;
+            let list = JSON.parse(localStorage.getItem('likedList') || "[]");
+            const refLoc = ref(db, `videos/${currentVid.id}/likes`);
+            if(list.includes(currentVid.id)) {
+                list = list.filter(id => id !== currentVid.id);
+                runTransaction(refLoc, (l) => (l||0) - 1);
+            } else {
+                list.push(currentVid.id);
+                runTransaction(refLoc, (l) => (l||0) + 1);
+            }
+            localStorage.setItem('likedList', JSON.stringify(list));
+        };
+
+        window.openRating = () => {
+            const b = document.getElementById('ratingBox');
+            b.style.display = (b.style.display === 'none') ? 'block' : 'none';
+        };
+
+        window.submitRating = (sel) => {
+            if(sel.value > 0 && currentVid) {
+                runTransaction(ref(db, `videos/${currentVid.id}`), (p) => {
+                    if(p) { p.ratingTotal=(p.ratingTotal||0)+parseInt(sel.value); p.ratingCount=(p.ratingCount||0)+1; }
+                    return p;
+                });
+                alert("Rated!");
+                document.getElementById('ratingBox').style.display = 'none';
+            }
+        };
+
+        window.focusComment = () => document.getElementById('cInput').focus();
+
+        window.addComment = () => {
+            const txt = document.getElementById('cInput').value;
+            const user = currentUser || "Guest";
+            if(txt && currentVid) {
+                push(ref(db, `comments/${currentVid.id}`), { user: user, text: txt });
+                document.getElementById('cInput').value = "";
+            }
+        };
+
+        function loadComments(id) {
+            const list = document.getElementById('commentList');
+            list.innerHTML = "";
+            onValue(ref(db, `comments/${id}`), (snap) => {
+                list.innerHTML = "";
+                const data = snap.val();
+                if(data) {
+                    Object.values(data).forEach(c => {
+                        list.innerHTML += `<li><span class="c-user">${c.user}:</span>${c.text}</li>`;
+                    });
+                } else {
+                    list.innerHTML = "<p style='text-align:center; color:#888'>No comments yet.</p>";
+                }
+            });
+        }
+    </script>
+</body>
+</html>
