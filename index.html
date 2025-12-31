@@ -3,221 +3,232 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Stream Pro</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <title>Stream Pro Ultra</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;500;700&display=swap" rel="stylesheet">
     <style>
         :root { 
-            --bg: #0a0a0a; 
-            --card-bg: #161616; 
+            --bg: #050505; 
+            --card-bg: #141414; 
             --primary: #e50914; 
             --text: #ffffff; 
-            --glass: rgba(20, 20, 20, 0.9);
-            --border: 1px solid rgba(255,255,255,0.1);
-            --msg-me: linear-gradient(45deg, #e50914, #ff4b5c);
-            --msg-other: #2a2a2a;
+            --text-gray: #a3a3a3;
+            --glass: rgba(20, 20, 20, 0.85);
+            --border: 1px solid rgba(255,255,255,0.08);
+            --gradient: linear-gradient(45deg, #e50914, #ff5f6d);
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; -webkit-tap-highlight-color: transparent; }
-        body { background: var(--bg); color: var(--text); padding-bottom: 80px; overflow-x: hidden; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Outfit', sans-serif; -webkit-tap-highlight-color: transparent; }
+        body { background: var(--bg); color: var(--text); padding-bottom: 90px; overflow-x: hidden; }
+
+        /* --- ANIMATIONS --- */
+        @keyframes fadeUp { from { opacity: 0; transform: translateY(20px) scale(0.98); } to { opacity: 1; transform: translateY(0) scale(1); } }
+        @keyframes pulse-red { 0% { box-shadow: 0 0 0 0 rgba(229, 9, 20, 0.7); } 70% { box-shadow: 0 0 0 10px rgba(229, 9, 20, 0); } 100% { box-shadow: 0 0 0 0 rgba(229, 9, 20, 0); } }
 
         /* --- HEADER --- */
         header { 
-            background: var(--glass); backdrop-filter: blur(10px);
+            background: var(--glass); backdrop-filter: blur(20px);
             padding: 15px 20px; position: sticky; top: 0; z-index: 100;
             border-bottom: var(--border); display: flex; justify-content: space-between; align-items: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
-        .logo { color: var(--primary); font-weight: 700; font-size: 22px; text-shadow: 0 0 10px rgba(229,9,20,0.4); }
-        .user-pill { background: rgba(255,255,255,0.1); padding: 5px 12px; border-radius: 20px; font-size: 12px; border: var(--border); }
+        .logo { 
+            color: var(--primary); font-weight: 800; font-size: 24px; 
+            letter-spacing: -1px; background: -webkit-linear-gradient(#e50914, #ff5f6d); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+        .user-pill { 
+            background: rgba(255,255,255,0.05); padding: 6px 14px; 
+            border-radius: 30px; font-size: 12px; font-weight: 600; 
+            border: var(--border); display: flex; align-items: center; gap: 6px;
+        }
+        .online-dot { width: 8px; height: 8px; background: #00e676; border-radius: 50%; box-shadow: 0 0 10px #00e676; }
 
         /* --- NAVIGATION --- */
         .bottom-nav {
-            position: fixed; bottom: 0; width: 100%; background: var(--glass);
-            backdrop-filter: blur(10px); border-top: var(--border);
-            display: flex; justify-content: space-around; padding: 10px 0; z-index: 200;
+            position: fixed; bottom: 0; width: 100%; background: rgba(10, 10, 10, 0.9);
+            backdrop-filter: blur(20px); border-top: var(--border);
+            display: flex; justify-content: space-around; padding: 12px 0; z-index: 200;
         }
-        .nav-btn { background: none; border: none; color: #888; font-size: 10px; cursor: pointer; display: flex; flex-direction: column; align-items: center; width: 25%; transition: 0.3s; }
-        .nav-btn.active { color: var(--primary); transform: translateY(-3px); }
-        .nav-icon { font-size: 24px; margin-bottom: 2px; }
+        .nav-btn { 
+            background: none; border: none; color: #666; font-size: 10px; font-weight: 500;
+            cursor: pointer; display: flex; flex-direction: column; align-items: center; 
+            transition: 0.3s; width: 25%;
+        }
+        .nav-btn.active { color: var(--text); transform: translateY(-4px); }
+        .nav-btn.active .nav-icon { color: var(--primary); filter: drop-shadow(0 0 8px var(--primary)); }
+        .nav-icon { font-size: 24px; margin-bottom: 4px; transition: 0.3s; }
 
-        /* --- SCREENS --- */
-        .screen { display: none; padding: 15px; animation: fadeIn 0.4s ease; }
+        /* --- LAYOUT --- */
+        .screen { display: none; padding: 15px; animation: fadeUp 0.5s cubic-bezier(0.165, 0.84, 0.44, 1); }
         .screen.active { display: block; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* --- BUTTONS & TABS (Fixed) --- */
-        .category-scroll { display: flex; gap: 10px; overflow-x: auto; padding-bottom: 5px; margin-bottom: 15px; scrollbar-width: none; }
-        .cat-btn { 
-            padding: 8px 16px; background: #222; border: 1px solid #333; 
-            color: #ddd; border-radius: 20px; cursor: pointer; font-size: 12px; white-space: nowrap; transition: 0.3s;
-        }
-        .cat-btn.active { background: var(--primary); color: white; border-color: var(--primary); font-weight: bold; }
-
-        .sub-tabs { background: #222; padding: 5px; border-radius: 10px; display: flex; gap: 5px; margin-bottom: 20px; }
-        .sub-tab-btn { flex: 1; padding: 10px; background: transparent; border: none; color: #888; border-radius: 8px; cursor: pointer; font-weight: 600; }
-        .sub-tab-btn.active { background: #333; color: white; }
-
-        /* --- CARDS & GRID --- */
+        .section-title { font-size: 20px; font-weight: 700; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
+        
+        /* --- CARDS --- */
         .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 15px; }
         .card { 
-            background: var(--card-bg); border-radius: 12px; overflow: hidden; 
-            cursor: pointer; transition: 0.2s; position: relative; border: var(--border);
-            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            background: var(--card-bg); border-radius: 16px; overflow: hidden; 
+            cursor: pointer; transition: 0.4s; position: relative; border: var(--border);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
         }
-        .card:active { transform: scale(0.98); }
+        .card:hover { transform: translateY(-8px); box-shadow: 0 15px 30px rgba(229, 9, 20, 0.15); border-color: rgba(229, 9, 20, 0.3); }
         
-        .thumb { height: 180px; background: #000; position: relative; }
-        .media-content { width: 100%; height: 100%; object-fit: cover; opacity: 0.8; }
-        .p-icon { position: absolute; top:50%; left:50%; transform:translate(-50%,-50%); color:white; font-size:40px; opacity: 0.9; filter: drop-shadow(0 0 5px black); }
+        .thumb { height: 200px; background: #000; position: relative; overflow: hidden; }
+        .media-content { width: 100%; height: 100%; object-fit: cover; opacity: 0.8; transition: 0.4s; }
+        .card:hover .media-content { opacity: 0.6; transform: scale(1.05); }
         
-        .info { padding: 10px; background: linear-gradient(to top, rgba(0,0,0,0.9), transparent); position: absolute; bottom: 0; width: 100%; }
-        .info h4 { font-size: 13px; margin: 0; color: #fff; text-shadow: 0 1px 2px black; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .card-stats { display: flex; gap: 8px; font-size: 11px; color: #ddd; margin-top: 3px; }
+        .p-icon { 
+            position: absolute; top:50%; left:50%; transform:translate(-50%,-50%); 
+            color:white; font-size:45px; opacity: 0.9; 
+            filter: drop-shadow(0 0 15px rgba(0,0,0,0.8));
+            transition: 0.3s;
+        }
+        .card:hover .p-icon { transform: translate(-50%,-50%) scale(1.2); color: var(--primary); }
 
-        /* --- CHAT UI --- */
+        .info { 
+            padding: 15px; background: linear-gradient(to top, #141414 10%, transparent);
+            position: absolute; bottom: 0; width: 100%;
+        }
+        .info h4 { font-size: 14px; margin: 0; color: #fff; text-shadow: 0 2px 4px black; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .info small { font-size: 11px; color: #ccc; display: block; margin-top: 2px; }
+
+        /* --- TABS --- */
+        .sub-tabs { background: rgba(255,255,255,0.05); padding: 5px; border-radius: 15px; display: flex; gap: 5px; margin-bottom: 25px; border: var(--border); }
+        .sub-tab-btn { 
+            flex: 1; padding: 12px; background: transparent; border: none; 
+            color: #888; border-radius: 12px; cursor: pointer; font-weight: 600; transition: 0.3s;
+        }
+        .sub-tab-btn.active { background: #222; color: white; box-shadow: 0 4px 15px rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); }
+
+        /* --- CHAT --- */
         .chat-container { display: flex; flex-direction: column; height: 75vh; }
-        .chat-box { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; padding: 15px; padding-bottom: 80px; }
+        .chat-box { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; padding: 15px; padding-bottom: 90px; }
+        .msg { max-width: 80%; padding: 12px 18px; border-radius: 20px; font-size: 14px; position: relative; word-wrap: break-word; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
+        .msg.self { align-self: flex-end; background: var(--gradient); border-bottom-right-radius: 4px; color: white; }
+        .msg.other { align-self: flex-start; background: #222; border-bottom-left-radius: 4px; color: #ddd; border: var(--border); }
+        .msg-user { font-size: 10px; font-weight: 700; opacity: 0.8; display: block; margin-bottom: 4px; letter-spacing: 0.5px; }
         
-        .msg { max-width: 75%; padding: 10px 15px; border-radius: 15px; font-size: 14px; position: relative; word-wrap: break-word; }
-        .msg.self { align-self: flex-end; background: var(--msg-me); color: white; border-bottom-right-radius: 2px; }
-        .msg.other { align-self: flex-start; background: var(--msg-other); color: #ddd; border-bottom-left-radius: 2px; }
-        .msg-user { font-size: 10px; font-weight: 600; opacity: 0.8; display: block; margin-bottom: 3px; }
-        .msg-img { max-width: 100%; border-radius: 10px; margin-top: 5px; }
-
         .chat-input-area { 
             position: fixed; bottom: 70px; left: 0; width: 100%; 
-            background: rgba(20,20,20,0.95); padding: 10px 15px; display: flex; gap: 10px; align-items: center; 
-            border-top: var(--border); backdrop-filter: blur(10px);
+            background: rgba(10,10,10,0.9); padding: 15px; display: flex; gap: 12px; align-items: center; 
+            border-top: var(--border); backdrop-filter: blur(15px);
         }
-        .chat-input-area input { flex: 1; padding: 12px; border-radius: 25px; border: 1px solid #444; background: #111; color: white; outline: none; }
-        .send-btn { background: var(--primary); width: 45px; height: 45px; border-radius: 50%; border: none; color: white; cursor: pointer; font-size: 18px; }
-        .icon-btn { background: none; border: none; font-size: 22px; cursor: pointer; color: #aaa; }
+        .chat-input-area input { flex: 1; padding: 14px 20px; border-radius: 30px; border: var(--border); background: #1a1a1a; color: white; outline: none; transition: 0.3s; }
+        .chat-input-area input:focus { border-color: var(--primary); background: #222; }
+        .send-btn { 
+            background: var(--primary); width: 50px; height: 50px; border-radius: 50%; 
+            border: none; color: white; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 20px;
+            box-shadow: 0 0 20px rgba(229, 9, 20, 0.4);
+        }
 
         /* --- PROFILE --- */
-        .profile-header { display: flex; flex-direction: column; align-items: center; padding: 20px 0; }
-        .profile-pic { width: 100px; height: 100px; border-radius: 50%; object-fit: cover; border: 3px solid var(--primary); padding: 2px; }
-        .profile-name { font-size: 20px; font-weight: 700; margin-top: 10px; display: flex; align-items: center; gap: 5px; }
-        .gender-badge { font-size: 10px; padding: 2px 6px; border-radius: 4px; color: white; }
-        .boy { background: #2196f3; } .girl { background: #e91e63; }
-        .stats-box { background: #222; padding: 5px 15px; border-radius: 10px; margin-top: 5px; font-size: 14px; color: #ccc; }
-
-        .tools-box { width: 100%; max-width: 500px; margin-bottom: 20px; text-align: center; }
-        .tool-link { display: inline-block; padding: 10px 15px; background: #222; border: 1px solid #444; color: #4da6ff; border-radius: 8px; text-decoration: none; font-size: 12px; font-weight: bold; margin: 0 5px; }
-
-        .upload-card { background: #1a1a1a; padding: 20px; border-radius: 15px; border: var(--border); margin-bottom: 20px; }
-        .inp-group input { width: 100%; padding: 12px; background: #0f0f0f; border: 1px solid #333; color: white; border-radius: 8px; margin-bottom: 10px; outline: none; }
-        .action-btn { width: 100%; padding: 12px; background: var(--primary); color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; }
+        .profile-header { display: flex; flex-direction: column; align-items: center; padding: 30px 0; }
+        .profile-pic { width: 120px; height: 120px; border-radius: 50%; object-fit: cover; border: 4px solid var(--card-bg); outline: 3px solid var(--primary); padding: 4px; background: #111; }
+        .profile-name { font-size: 24px; font-weight: 700; margin-top: 15px; display: flex; align-items: center; gap: 8px; }
+        .gender-badge { font-size: 10px; padding: 4px 10px; border-radius: 8px; color: white; text-transform: uppercase; font-weight: 800; letter-spacing: 1px; }
+        .boy { background: #2979ff; } .girl { background: #ff4081; }
         
-        /* --- MODALS --- */
-        .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 500; display: flex; justify-content: center; align-items: center; opacity: 0; pointer-events: none; transition: 0.3s; }
+        .upload-card { background: var(--card-bg); padding: 25px; border-radius: 20px; border: var(--border); margin-bottom: 25px; }
+        .inp-group input { width: 100%; padding: 15px; background: #0a0a0a; border: 1px solid #333; color: white; border-radius: 12px; margin-bottom: 12px; outline: none; }
+        .action-btn { width: 100%; padding: 15px; background: var(--primary); color: white; border: none; border-radius: 12px; font-weight: 700; cursor: pointer; transition: 0.2s; }
+        .action-btn:active { transform: scale(0.95); }
+
+        /* --- PLAYER & MODALS --- */
+        .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 500; display: flex; justify-content: center; align-items: center; opacity: 0; pointer-events: none; transition: 0.4s; backdrop-filter: blur(5px); }
         .modal.open { opacity: 1; pointer-events: auto; }
-        .modal-content { background: #1a1a1a; padding: 30px; border-radius: 20px; width: 85%; max-width: 350px; text-align: center; border: var(--border); }
-        .modal input, .modal select { width: 100%; padding: 12px; background: #0f0f0f; border: 1px solid #333; color: white; border-radius: 8px; margin: 10px 0; outline: none; text-align: center; }
-
-        /* Full Screen Profile Modal */
-        #userProfileModal .modal-content { 
-            width: 100%; height: 100%; max-width: 100%; border-radius: 0; padding: 0; 
-            background: #000; display: flex; flex-direction: column; 
+        .modal-content { background: #161616; padding: 40px; border-radius: 25px; width: 90%; max-width: 350px; text-align: center; border: var(--border); box-shadow: 0 20px 50px rgba(0,0,0,0.5); }
+        
+        #playerScreen { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 400; overflow-y: auto; }
+        video#mainVideo, img#mainImage { width: 100%; max-height: 55vh; display: block; margin: 0 auto; margin-top: 50px; }
+        .close-btn { position: absolute; top: 20px; left: 20px; background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); color: white; border: none; padding: 10px 20px; border-radius: 30px; z-index: 10; font-weight: bold; border: 1px solid rgba(255,255,255,0.1); cursor: pointer; }
+        
+        .interaction-area { padding: 25px; background: #111; min-height: 50vh; border-radius: 30px 30px 0 0; margin-top: -30px; position: relative; border-top: 1px solid #333; }
+        .act-btn { flex: 1; padding: 12px; background: #1a1a1a; border: 1px solid #333; color: #ccc; border-radius: 15px; cursor: pointer; font-weight: 500; transition: 0.2s; }
+        .act-btn:hover { background: #222; }
+        
+        /* DELETE BUTTON (New) */
+        .delete-video-btn { 
+            background: rgba(220, 53, 69, 0.1); color: #ff4b5c; border: 1px solid rgba(220, 53, 69, 0.3); 
+            padding: 10px; width: 100%; border-radius: 12px; margin-top: 15px; cursor: pointer; font-weight: bold;
+            display: none; /* Hidden by default */
         }
-        
-        /* PLAYER OVERLAY */
-        #playerScreen { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: black; z-index: 400; overflow-y: auto; }
-        .media-viewer { width: 100%; background: black; position: relative; }
-        video#mainVideo, img#mainImage { width: 100%; max-height: 50vh; display: block; margin: 0 auto; }
-        .close-btn { position: absolute; top: 20px; left: 20px; background: rgba(255,255,255,0.2); backdrop-filter: blur(5px); color: white; border: none; padding: 8px 16px; border-radius: 20px; z-index: 10; font-weight: bold; }
-        
-        .interaction-area { padding: 20px; background: #111; min-height: 50vh; border-radius: 20px 20px 0 0; margin-top: -20px; position: relative; }
-        .three-options { display: flex; justify-content: space-around; background: #222; padding: 12px; border-radius: 12px; margin-bottom: 15px; }
-        .opt-btn { background: none; border: none; cursor: pointer; color: #aaa; display: flex; flex-direction: column; align-items: center; font-size: 12px; }
-        .opt-btn span { font-size: 22px; margin-bottom: 4px; }
-        .opt-btn.liked { color: var(--primary); font-weight: bold; }
-        
-        .comments-section { border-top: 1px solid #333; padding-top: 15px; }
-        .c-box { display: flex; gap: 10px; margin-bottom: 15px; }
-        .c-box input { flex: 1; padding: 10px; background: #222; border: 1px solid #444; border-radius: 20px; color: white; outline: none; }
-        .c-box button { background: var(--primary); color: white; border: none; padding: 0 20px; border-radius: 20px; cursor: pointer; }
-        #commentList li { background: #1a1a1a; padding: 10px; margin-bottom: 8px; border-radius: 8px; font-size: 13px; list-style: none; }
-        .c-user { color: var(--primary); font-weight: bold; margin-right: 5px; }
-        
-        /* Search & Inbox */
-        .search-row { display: flex; gap: 10px; margin-bottom: 15px; }
-        .search-row input { flex: 1; padding: 12px; background: #222; border: 1px solid #444; color: white; border-radius: 10px; outline:none; }
-        .search-row button { padding: 0 15px; background: #333; color: white; border: 1px solid #444; border-radius: 10px; cursor: pointer; }
-        .inbox-item { display: flex; align-items: center; gap: 15px; padding: 15px; background: #1a1a1a; border-radius: 12px; margin-bottom: 10px; cursor: pointer; border: var(--border); }
-        .inbox-img { width: 45px; height: 45px; border-radius: 50%; object-fit: cover; }
+        .delete-video-btn:hover { background: #dc3545; color: white; }
+
+        /* Search */
+        .search-row { display: flex; gap: 10px; margin-bottom: 20px; }
+        .search-row input { flex: 1; padding: 14px; background: #1a1a1a; border: 1px solid #333; color: white; border-radius: 12px; outline:none; }
+        .search-row button { padding: 0 18px; background: #333; color: white; border: 1px solid #333; border-radius: 12px; cursor: pointer; }
     </style>
 </head>
 <body>
 
-    <!-- AUTH MODAL -->
+    <!-- LOGIN -->
     <div id="nameModal" class="modal open">
         <div class="modal-content">
-            <h2 style="color:var(--primary)">Stream Pro</h2>
-            <p style="color:#888; font-size:12px; margin-bottom:15px;">Create your identity</p>
-            <input type="text" id="userNameInput" placeholder="Unique Username">
-            <select id="genderInput">
+            <h2 style="color:var(--primary); margin-bottom:5px;">Join Now</h2>
+            <p style="color:#888; font-size:13px; margin-bottom:20px;">Start your streaming journey</p>
+            <input type="text" id="userNameInput" placeholder="Unique Username" style="width:100%; padding:14px; background:#0a0a0a; border:1px solid #333; color:white; border-radius:12px; text-align:center; outline:none;">
+            <select id="genderInput" style="width:100%; padding:14px; background:#0a0a0a; border:1px solid #333; color:white; border-radius:12px; margin-top:10px; outline:none;">
                 <option value="Boy">Boy 👦</option>
                 <option value="Girl">Girl 👧</option>
             </select>
-            <p id="loginError" style="color:#ff4b5c; font-size:12px; display:none;"></p>
-            <button class="action-btn" onclick="attemptLogin()">Get Started</button>
+            <p id="loginError" style="color:#ff4b5c; font-size:12px; margin-top:10px; display:none;"></p>
+            <button class="action-btn" style="margin-top:20px;" onclick="attemptLogin()">Enter App</button>
         </div>
     </div>
 
-    <!-- USER PROFILE VIEW MODAL -->
+    <!-- PROFILE VIEW -->
     <div id="userProfileModal" class="modal">
-        <div class="modal-content">
-            <div style="padding: 20px; text-align: left;">
-                <button onclick="closeUserModal()" class="close-btn" style="position:relative; top:0; left:0; margin-bottom:20px;">← Back</button>
-                <div class="profile-header">
+        <div class="modal-content" style="width:100%; height:100%; max-width:100%; border-radius:0; padding:0; background:#000;">
+            <div style="padding:20px; text-align:left;">
+                <button onclick="closeUserModal()" class="close-btn">← Back</button>
+                <div class="profile-header" style="margin-top:50px;">
                     <img id="viewUserPic" class="profile-pic" src="">
                     <h2 class="profile-name" id="viewUserName">Name</h2>
-                    <div class="stats-box"><span id="viewFollowers" style="color:white; font-weight:bold;">0</span> Followers</div>
-                    
-                    <div style="display:flex; gap:10px; margin-top:20px; width:100%; justify-content:center;">
-                        <button id="followBtn" class="action-btn" style="width:auto; padding:10px 30px;" onclick="toggleFollow()">Follow</button>
-                        <button class="action-btn" style="width:auto; padding:10px 30px; background:#333;" onclick="startPrivateChat()">Message</button>
+                    <div style="background:#222; padding:8px 20px; border-radius:10px; margin-top:10px; font-size:14px;"><span id="viewFollowers" style="color:white; font-weight:bold;">0</span> Followers</div>
+                    <div style="display:flex; gap:10px; margin-top:20px;">
+                        <button id="followBtn" class="action-btn" style="padding:10px 30px;" onclick="toggleFollow()">Follow</button>
+                        <button class="action-btn" style="padding:10px 30px; background:#222; border:1px solid #333;" onclick="startPrivateChat()">Message</button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- PRIVATE CHAT MODAL -->
+    <!-- PRIVATE CHAT -->
     <div id="privateChatModal" class="modal">
-        <div class="modal-content" style="width:100%; height:100%; max-width:100%; border-radius:0; padding:0; display:flex; flex-direction:column; background:#0f0f0f;">
+        <div class="modal-content" style="width:100%; height:100%; max-width:100%; border-radius:0; padding:0; display:flex; flex-direction:column; background:#050505;">
             <div style="padding:15px; background:rgba(20,20,20,0.95); border-bottom:var(--border); display:flex; align-items:center; gap:15px;">
                 <button onclick="closePrivateChat()" style="background:none; border:none; color:white; font-size:24px;">←</button>
                 <div style="display:flex; align-items:center; gap:10px;">
-                    <img id="pChatImg" src="" style="width:35px; height:35px; border-radius:50%;">
-                    <h3 id="pChatTitle" style="margin:0; font-size:16px;">User</h3>
+                    <img id="pChatImg" src="" style="width:35px; height:35px; border-radius:50%; border:1px solid #333;">
+                    <span id="pChatTitle" style="font-weight:bold;">User</span>
                 </div>
             </div>
             <div class="chat-box" id="privateChatBox"></div>
             <div class="chat-input-area" style="position:relative; bottom:0;">
-                <input type="text" id="pChatMsg" placeholder="Message...">
+                <input type="text" id="pChatMsg" placeholder="Type a message...">
                 <button class="send-btn" onclick="sendPrivateText()">➤</button>
             </div>
         </div>
     </div>
 
-    <!-- APP HEADER -->
     <header>
         <div class="logo">StreamPro</div>
-        <div class="user-pill"><span id="displayUser">Guest</span></div>
+        <div class="user-pill"><span class="online-dot"></span> <span id="displayUser">Guest</span></div>
     </header>
 
-    <!-- 1. HOME SCREEN -->
+    <!-- 1. HOME -->
     <div id="homeSection" class="screen active">
         <div class="section-title">🔥 Trending</div>
-        <div class="category-scroll">
-            <button class="cat-btn active" onclick="filterHome('all', this)">All</button>
-            <button class="cat-btn" onclick="filterHome('Aroob Jatoi', this)">Aroob Jatoi</button>
-            <button class="cat-btn" onclick="filterHome('Nikku Vlogz', this)">Nikku Vlogz</button>
+        <div class="sub-tabs">
+            <button class="sub-tab-btn active" onclick="filterHome('all', this)">All</button>
+            <button class="sub-tab-btn" onclick="filterHome('Aroob Jatoi', this)">Aroob</button>
+            <button class="sub-tab-btn" onclick="filterHome('Nikku Vlogz', this)">Nikku</button>
         </div>
-        <div class="grid" id="adminGrid" style="margin-top:15px;"><p style="color:#555">Loading...</p></div>
+        <div class="grid" id="adminGrid"><p style="color:#555">Loading...</p></div>
     </div>
 
-    <!-- 2. FOR YOU SCREEN -->
+    <!-- 2. FOR YOU -->
     <div id="forYouSection" class="screen">
         <div class="section-title">✨ For You</div>
         <div class="sub-tabs">
@@ -227,66 +238,58 @@
         <div class="grid" id="userGrid"><p style="color:#555">Loading...</p></div>
     </div>
 
-    <!-- 3. CHAT SCREEN -->
+    <!-- 3. CHAT -->
     <div id="chatSection" class="screen">
         <div class="search-row">
-            <input type="text" id="searchUserInput" placeholder="Find User (Partial name works)...">
+            <input type="text" id="searchUserInput" placeholder="Find friends...">
             <button onclick="searchUser()">🔍</button>
         </div>
-
         <div class="sub-tabs">
             <button class="sub-tab-btn active" onclick="switchChatTab('global')">Global</button>
             <button class="sub-tab-btn" onclick="switchChatTab('inbox')">Inbox</button>
         </div>
-
-        <!-- Global -->
+        
         <div id="globalChatContainer" style="height:60vh; display:flex; flex-direction:column;">
             <div class="chat-box" id="globalChatBox"></div>
             <div class="chat-input-area" style="position:absolute; bottom:80px; width:92%;">
-                <button class="icon-btn" onclick="sendUrlImage()">🔗</button>
-                <label for="chatFileInput" class="icon-btn">📷</label>
-                <input type="file" id="chatFileInput" accept="image/*" style="display:none" onchange="sendFileImage()">
+                <button onclick="sendUrlImage()" style="background:none; border:none; font-size:20px; margin-right:10px;">🔗</button>
                 <input type="text" id="chatMsg" placeholder="Global message...">
                 <button class="send-btn" onclick="sendText()">➤</button>
             </div>
         </div>
-
-        <!-- Inbox -->
-        <div id="inboxContainer" style="display:none;">
+        <div id="inboxContainer" style="display:none; padding-top:10px;">
             <div id="inboxList" style="display:flex; flex-direction:column; gap:10px;"></div>
         </div>
     </div>
 
-    <!-- 4. PROFILE SCREEN -->
+    <!-- 4. PROFILE -->
     <div id="profileSection" class="screen">
         <div class="profile-header">
             <div style="position:relative;">
                 <img id="myProfilePic" class="profile-pic" src="https://via.placeholder.com/150">
-                <label for="picInput" style="position:absolute; bottom:0; right:0; background:white; color:black; width:32px; height:32px; border-radius:50%; display:flex; align-items:center; justify-content:center; cursor:pointer;">📷</label>
+                <label for="picInput" style="position:absolute; bottom:5px; right:5px; background:white; color:black; width:35px; height:35px; border-radius:50%; display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:18px;">📷</label>
                 <input type="file" id="picInput" accept="image/*" style="display:none" onchange="uploadProfilePic()">
             </div>
             <h2 class="profile-name" id="profileName">Guest <span id="myGenderBadge" class="gender-badge"></span></h2>
-            <div class="stats-box"><span id="myFollowerCount" style="color:white; font-weight:bold;">0</span> Followers</div>
+            <div style="color:#888; font-size:14px; margin-top:5px;"><span id="myFollowerCount" style="color:white; font-weight:bold;">0</span> Followers</div>
         </div>
 
-        <!-- Tools -->
-        <div class="tools-box">
-            <div class="tool-link"><a href="https://catbox.moe/" target="_blank" style="color:inherit; text-decoration:none;">📹 Video Link</a></div>
-            <div class="tool-link"><a href="https://postimages.org/" target="_blank" style="color:inherit; text-decoration:none;">🖼️ Photo Link</a></div>
+        <div style="display:flex; justify-content:center; gap:10px; margin-bottom:25px;">
+            <a href="https://catbox.moe/" target="_blank" style="text-decoration:none; padding:8px 15px; background:#222; border-radius:8px; color:#4da6ff; font-size:12px; font-weight:bold;">📹 Video Link</a>
+            <a href="https://postimages.org/" target="_blank" style="text-decoration:none; padding:8px 15px; background:#222; border-radius:8px; color:#4da6ff; font-size:12px; font-weight:bold;">🖼️ Photo Link</a>
         </div>
 
-        <!-- Uploads -->
         <div class="upload-card">
-            <h4 style="margin-bottom:10px; color:#aaa;">Upload Video (URL)</h4>
-            <div class="inp-group"><input type="text" id="uVidTitle" placeholder="Title"></div>
+            <h4 style="margin-bottom:15px; color:#aaa;">Post Video (URL)</h4>
+            <div class="inp-group"><input type="text" id="uVidTitle" placeholder="Video Title"></div>
             <div class="inp-group"><input type="text" id="uVidUrl" placeholder="https://..."></div>
-            <button class="action-btn" onclick="uploadUserContent('video')">Post Video</button>
+            <button class="action-btn" onclick="uploadUserContent('video')">Upload Video</button>
         </div>
         <div class="upload-card">
-            <h4 style="margin-bottom:10px; color:#aaa;">Upload Photo (Gallery)</h4>
-            <div class="inp-group"><input type="text" id="uPhotoTitle" placeholder="Caption"></div>
+            <h4 style="margin-bottom:15px; color:#aaa;">Post Photo (Gallery)</h4>
+            <div class="inp-group"><input type="text" id="uPhotoTitle" placeholder="Photo Caption"></div>
             <div class="inp-group"><input type="file" id="contentPhotoInput" accept="image/*" style="background:none; padding-left:0;"></div>
-            <button class="action-btn" style="background:#007bff;" onclick="uploadUserContent('photo')">Post Photo</button>
+            <button class="action-btn" style="background:#007bff;" onclick="uploadUserContent('photo')">Upload Photo</button>
         </div>
     </div>
 
@@ -298,27 +301,27 @@
             <img id="mainImage" src="" style="display:none">
         </div>
         <div class="interaction-area">
-            <h2 id="viewTitle" style="color:white; font-size:18px;">Title</h2>
-            
-            <div class="three-options">
-                <button class="opt-btn" id="likeBtn" onclick="toggleLike()"><span>❤️</span> <div id="likeLabel">Like</div></button>
-                <button class="opt-btn" onclick="toggleRating()"><span>⭐</span> <div>Rate</div></button>
-                <button class="opt-btn" onclick="focusComment()"><span>💬</span> <div>Comment</div></button>
+            <h2 id="viewTitle" style="color:white; font-size:20px; font-weight:600;">Title</h2>
+            <p id="viewUploader" style="color:#777; font-size:12px; margin-bottom:15px;">Uploaded by User</p>
+
+            <div style="display:flex; gap:10px; margin-bottom:15px;">
+                <button class="act-btn" id="likeBtn" onclick="toggleLike()">❤️ Like</button>
+                <button class="act-btn" onclick="toggleRating()">⭐ Rate</button>
             </div>
-            
+
+            <!-- DELETE BUTTON (Only visible if owner) -->
+            <button id="deletePostBtn" class="delete-video-btn" onclick="deleteMyPost()">🗑️ Delete My Post</button>
+
             <div id="ratingBox" style="display:none; margin-bottom:15px;">
-                <select onchange="submitRating(this)" style="width:100%; padding:10px; background:#333; color:white; border:none; border-radius:10px;">
-                    <option value="0">Select Stars...</option>
-                    <option value="5">⭐⭐⭐⭐⭐</option>
-                    <option value="4">⭐⭐⭐⭐</option>
-                    <option value="3">⭐⭐⭐</option>
+                <select onchange="submitRating(this)" style="width:100%; padding:12px; background:#222; color:white; border:none; border-radius:10px;">
+                    <option value="0">Select Stars...</option><option value="5">5 ★</option><option value="4">4 ★</option><option value="3">3 ★</option>
                 </select>
             </div>
 
-            <div class="comments-section">
-                <div class="c-box">
-                    <input type="text" id="cInput" placeholder="Comment...">
-                    <button onclick="addComment()">Post</button>
+            <div style="border-top:1px solid #333; padding-top:15px;">
+                <div style="display:flex; gap:10px; margin-bottom:15px;">
+                    <input type="text" id="cInput" placeholder="Write a comment..." style="flex:1; padding:12px; background:#222; border:none; color:white; border-radius:20px;">
+                    <button onclick="addComment()" style="padding:0 20px; background:var(--primary); color:white; border:none; border-radius:20px;">➤</button>
                 </div>
                 <ul id="commentList" style="list-style:none;"></ul>
             </div>
@@ -327,19 +330,17 @@
 
     <!-- NAV -->
     <div class="bottom-nav">
-        <button class="nav-btn active" onclick="switchTab('homeSection', this)"><div class="nav-icon">🏠</div> Home</button>
-        <button class="nav-btn" onclick="switchTab('forYouSection', this)"><div class="nav-icon">✨</div> For You</button>
-        <button class="nav-btn" onclick="switchTab('chatSection', this)"><div class="nav-icon">💬</div> Chat</button>
-        <button class="nav-btn" onclick="switchTab('profileSection', this)"><div class="nav-icon">👤</div> Profile</button>
+        <button class="nav-btn active" onclick="switchTab('homeSection', this)"><div class="nav-icon">🏠</div>Home</button>
+        <button class="nav-btn" onclick="switchTab('forYouSection', this)"><div class="nav-icon">✨</div>For You</button>
+        <button class="nav-btn" onclick="switchTab('chatSection', this)"><div class="nav-icon">💬</div>Chat</button>
+        <button class="nav-btn" onclick="switchTab('profileSection', this)"><div class="nav-icon">👤</div>Profile</button>
     </div>
 
-    <!-- JS -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
-        import { getDatabase, ref, onValue, push, set, get, runTransaction, update } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
+        import { getDatabase, ref, onValue, push, set, get, runTransaction, update, remove } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
         import { getStorage, ref as sRef, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-storage.js";
 
-        // OLD CONFIG (video-b451b)
         const firebaseConfig = {
             apiKey: "AIzaSyCNCdgG86PPRKRugijbN-SavZsih81G-tE",
             authDomain: "video-b451b.firebaseapp.com",
@@ -370,14 +371,12 @@
             const display = document.getElementById('userNameInput').value.trim();
             const gender = document.getElementById('genderInput').value;
             if(!name) return;
-            
             const userRef = ref(db, 'users/' + name);
             const snapshot = await get(userRef);
-
             if(snapshot.exists()) {
-                if(snapshot.val().banned) { alert("⛔ BANNED!"); return; }
+                if(snapshot.val().banned) { alert("⛔ Your account is BANNED!"); return; }
                 if(name === localStorage.getItem('userId')) { completeLogin(name, display); return; }
-                document.getElementById('loginError').innerText = "Taken!";
+                document.getElementById('loginError').innerText = "Username taken!";
                 document.getElementById('loginError').style.display = 'block';
             } else {
                 await set(userRef, { displayName: display, gender: gender, profilePic: "https://via.placeholder.com/150", followers: 0, banned: false });
@@ -432,7 +431,7 @@
             if (type === 'video') {
                 const title = document.getElementById('uVidTitle').value; const url = document.getElementById('uVidUrl').value;
                 if(!title || !url) return;
-                push(ref(db, 'user_uploads'), { type: 'video', title: title, url: url, uploader: currentUser, likes: 0, ratingTotal: 0, ratingCount: 0, timestamp: Date.now() });
+                push(ref(db, 'user_uploads'), { type: 'video', title: title, url: url, uploader: currentUser, uploaderId: currentUserId, likes: 0, ratingTotal: 0, ratingCount: 0, timestamp: Date.now() });
             } else {
                 const title = document.getElementById('uPhotoTitle').value; const file = document.getElementById('contentPhotoInput').files[0];
                 if(!title || !file) return;
@@ -440,15 +439,15 @@
                     const r = sRef(storage, 'user_photos/'+Date.now()+'_'+file.name);
                     await uploadBytes(r, file);
                     const url = await getDownloadURL(r);
-                    push(ref(db, 'user_uploads'), { type: 'photo', title: title, url: url, uploader: currentUser, likes: 0, ratingTotal: 0, ratingCount: 0, timestamp: Date.now() });
+                    push(ref(db, 'user_uploads'), { type: 'photo', title: title, url: url, uploader: currentUser, uploaderId: currentUserId, likes: 0, ratingTotal: 0, ratingCount: 0, timestamp: Date.now() });
                 } catch(e) { alert("Error"); }
             }
-            alert("Uploaded!"); switchTab('forYouSection', document.querySelectorAll('.nav-btn')[1]);
+            alert("Posted!"); switchTab('forYouSection', document.querySelectorAll('.nav-btn')[1]);
         }
 
         function sortItems(items) { return items.sort((a, b) => (b.likes || 0) - (a.likes || 0)); }
 
-        // --- DATA DISPLAY ---
+        // --- DISPLAY ---
         onValue(ref(db, 'videos'), (snap) => {
             adminVideos = []; const data = snap.val();
             if(data) Object.keys(data).forEach(key => adminVideos.push({id:key, collection:'videos', ...data[key]}));
@@ -456,7 +455,7 @@
         });
 
         window.filterHome = (name, btn) => {
-            document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active')); btn.classList.add('active'); renderHomeGrid(name);
+            document.querySelectorAll('.sub-tab-btn').forEach(b => b.classList.remove('active')); btn.classList.add('active'); renderHomeGrid(name);
         }
         function renderHomeGrid(name) {
             const grid = document.getElementById('adminGrid'); grid.innerHTML = "";
@@ -484,24 +483,44 @@
             const link = v.url || v.videoUrl;
             let thumb = (v.type==='video'||!v.type) ? `<video src="${link}#t=0.5" class="media-content" preload="metadata" muted></video><div class="p-icon">▶</div>` : `<img src="${link}" class="media-content">`;
             let r = v.ratingCount ? (v.ratingTotal/v.ratingCount).toFixed(1) : 0;
-            return `<div class="card" onclick="openViewer('${v.id}','${v.collection}','${v.type||'video'}','${link}','${v.title.replace(/'/g, "\\'")}')"><div class="thumb">${thumb}</div><div class="info"><h4>${v.title}</h4><div class="card-stats"><span>❤️ ${v.likes||0}</span><span>⭐ ${r}</span></div></div></div>`;
+            return `<div class="card" onclick="openViewer('${v.id}','${v.collection}','${v.type||'video'}','${link}','${v.title.replace(/'/g, "\\'")}', '${v.uploader || 'Admin'}', '${v.uploaderId || ''}')"><div class="thumb">${thumb}</div><div class="info"><h4>${v.title}</h4><small>${v.uploader||'Admin'}</small><div class="card-stats"><span>❤️ ${v.likes||0}</span><span>⭐ ${r}</span></div></div></div>`;
         }
 
-        // --- VIEWER & SOCIAL ---
-        window.openViewer = (id, col, type, url, title) => {
+        // --- VIEWER & DELETE ---
+        window.openViewer = (id, col, type, url, title, uploader, uploaderId) => {
             activePost = { id, collection: col };
             document.getElementById('playerScreen').style.display = 'block';
             const vid = document.getElementById('mainVideo'); const img = document.getElementById('mainImage');
             if(type === 'video') { vid.style.display='block'; img.style.display='none'; vid.src=url; } else { vid.style.display='none'; img.style.display='block'; vid.pause(); img.src=url; }
             document.getElementById('viewTitle').innerText = title;
+            document.getElementById('viewUploader').innerText = "Uploaded by " + uploader;
             document.getElementById('ratingBox').style.display = 'none';
+            
+            // SHOW DELETE BUTTON IF OWNER
+            const delBtn = document.getElementById('deletePostBtn');
+            if(uploaderId === currentUserId) {
+                delBtn.style.display = 'block';
+            } else {
+                delBtn.style.display = 'none';
+            }
+
             checkLike(id); loadComments(id);
         };
         window.closePlayer = () => { document.getElementById('playerScreen').style.display='none'; document.getElementById('mainVideo').pause(); activePost=null; }
 
+        // --- DELETE FUNCTION ---
+        window.deleteMyPost = async () => {
+            if(!activePost) return;
+            if(confirm("Permanently delete this?")) {
+                await remove(ref(db, `${activePost.collection}/${activePost.id}`));
+                alert("Deleted!");
+                closePlayer();
+            }
+        }
+
         function checkLike(id) {
             const btn = document.getElementById('likeBtn'); const list = JSON.parse(localStorage.getItem('likedList') || "[]");
-            if(list.includes(id)) { btn.classList.add('liked'); document.getElementById('likeLabel').innerText="Liked"; } else { btn.classList.remove('liked'); document.getElementById('likeLabel').innerText="Like"; }
+            if(list.includes(id)) { btn.classList.add('active'); btn.innerHTML="❤️ Liked"; } else { btn.classList.remove('active'); btn.innerHTML="❤️ Like"; }
         }
         window.toggleLike = () => {
             if(!activePost) return; const {id,collection} = activePost; let list = JSON.parse(localStorage.getItem('likedList')||"[]"); const r = ref(db, `${collection}/${id}/likes`);
@@ -510,11 +529,10 @@
         }
         window.toggleRating = () => { const b = document.getElementById('ratingBox'); b.style.display=(b.style.display==='none')?'block':'none'; }
         window.submitRating = (sel) => { if(sel.value>0 && activePost) { runTransaction(ref(db, `${activePost.collection}/${activePost.id}`), (p)=>{if(p){p.ratingTotal=(p.ratingTotal||0)+parseInt(sel.value); p.ratingCount=(p.ratingCount||0)+1;} return p;}); alert("Rated!"); document.getElementById('ratingBox').style.display='none'; } }
-        window.focusComment = () => document.getElementById('cInput').focus();
         window.addComment = () => { const t = document.getElementById('cInput').value; if(t&&activePost) { push(ref(db, `comments/${activePost.id}`), { user: currentUser, text: t }); document.getElementById('cInput').value = ""; } }
         function loadComments(id) { const l = document.getElementById('commentList'); onValue(ref(db, `comments/${id}`), (s)=>{l.innerHTML=""; const d=s.val(); if(d) Object.values(d).forEach(c=>l.innerHTML+=`<li style="background:#222; margin-bottom:5px; padding:8px; border-radius:8px;"><span style="color:var(--primary); font-weight:bold;">${c.user}</span> ${c.text}</li>`)}); }
 
-        // --- CHAT & SOCIAL ---
+        // --- CHAT ---
         window.switchChatTab = (t) => {
             if(t==='global'){ document.getElementById('globalChatContainer').style.display='flex'; document.getElementById('inboxContainer').style.display='none'; }
             else { document.getElementById('globalChatContainer').style.display='none'; document.getElementById('inboxContainer').style.display='block'; loadInbox(); }
@@ -524,53 +542,16 @@
         window.sendUrlImage = () => { const u = prompt("Link:"); if(u) push(ref(db, 'global_chat'), { user: currentUser, url: u, type: 'image', timestamp: Date.now() }); }
         window.sendFileImage = async () => { const f = document.getElementById('chatFileInput').files[0]; if(!f) return; const r = sRef(storage, 'chat/'+Date.now()+'_'+f.name); await uploadBytes(r,f); const u = await getDownloadURL(r); push(ref(db, 'global_chat'), { user: currentUser, url: u, type: 'image', timestamp: Date.now() }); }
 
-        window.searchUser = async () => { 
-            const q = document.getElementById('searchUserInput').value.trim().toLowerCase(); 
-            if(!q) return;
-            // PARTIAL SEARCH FIX
-            const refU = ref(db, 'users');
-            const snap = await get(refU);
-            if(snap.exists()) {
-                let found = false;
-                snap.forEach(c => {
-                    const k = c.key; const d = c.val();
-                    if(k.includes(q) || d.displayName.toLowerCase().includes(q)) {
-                        viewingUser = {id:k, ...d}; openUserModal(); found=true; return true;
-                    }
-                });
-                if(!found) alert("Not found");
-            }
-        }
-        
-        function openUserModal() {
-            document.getElementById('userProfileModal').classList.add('open');
-            document.getElementById('viewUserPic').src=viewingUser.profilePic;
-            document.getElementById('viewUserName').innerHTML = `${viewingUser.displayName} <span class="gender-badge ${viewingUser.gender==='Boy'?'boy':'girl'}">${viewingUser.gender}</span>`;
-            document.getElementById('viewFollowers').innerText=viewingUser.followersList?Object.keys(viewingUser.followersList).length:0;
-        }
+        window.searchUser = async () => { const q = document.getElementById('searchUserInput').value.trim().toLowerCase(); const s = await get(ref(db, 'users/'+q)); if(s.exists()) { viewingUser = {id:q, ...s.val()}; openUserModal(); } else alert("Not found"); }
+        function openUserModal() { document.getElementById('userProfileModal').classList.add('open'); document.getElementById('viewUserPic').src=viewingUser.profilePic; document.getElementById('viewUserName').innerHTML = `${viewingUser.displayName} <span class="gender-badge ${viewingUser.gender==='Boy'?'boy':'girl'}">${viewingUser.gender}</span>`; document.getElementById('viewFollowers').innerText=viewingUser.followersList?Object.keys(viewingUser.followersList).length:0; }
         window.closeUserModal = () => document.getElementById('userProfileModal').classList.remove('open');
+        window.toggleFollow = async () => { if(!viewingUser) return; const my = currentUserId; const r = ref(db, `users/${viewingUser.id}/followersList`); await runTransaction(r, (l)=>{if(!l)l={}; if(l[my]) delete l[my]; else l[my]=true; return l;}); const s = await get(r); document.getElementById('viewFollowers').innerText=s.exists()?Object.keys(s.val()).length:0; }
         
-        window.toggleFollow = async () => {
-            if(!viewingUser) return; const my = currentUserId; const r = ref(db, `users/${viewingUser.id}/followersList`);
-            await runTransaction(r, (l)=>{if(!l)l={}; if(l[my]) delete l[my]; else l[my]=true; return l;});
-            const s = await get(r); document.getElementById('viewFollowers').innerText=s.exists()?Object.keys(s.val()).length:0;
-        }
-
-        window.startPrivateChat = () => {
-            if(!viewingUser) return;
-            activeChatId = [currentUserId, viewingUser.id].sort().join('_');
-            document.getElementById('pChatTitle').innerText = viewingUser.displayName;
-            document.getElementById('pChatImg').src = viewingUser.profilePic;
-            document.getElementById('userProfileModal').classList.remove('open');
-            document.getElementById('privateChatModal').classList.add('open');
-            loadPrivateMessages(activeChatId);
-            const u = {}; u[`users/${currentUserId}/chats/${viewingUser.id}`] = {name: viewingUser.displayName, pic: viewingUser.profilePic}; u[`users/${viewingUser.id}/chats/${currentUserId}`] = {name: currentUser, pic: document.getElementById('myProfilePic').src};
-            update(ref(db), u);
-        }
+        window.startPrivateChat = () => { if(!viewingUser) return; activeChatId = [currentUserId, viewingUser.id].sort().join('_'); document.getElementById('pChatTitle').innerText = viewingUser.displayName; document.getElementById('pChatImg').src = viewingUser.profilePic; document.getElementById('userProfileModal').classList.remove('open'); document.getElementById('privateChatModal').classList.add('open'); loadPrivateMessages(activeChatId); const u = {}; u[`users/${currentUserId}/chats/${viewingUser.id}`] = {name: viewingUser.displayName, pic: viewingUser.profilePic}; u[`users/${viewingUser.id}/chats/${currentUserId}`] = {name: currentUser, pic: document.getElementById('myProfilePic').src}; update(ref(db), u); }
         window.closePrivateChat = () => { document.getElementById('privateChatModal').classList.remove('open'); activeChatId=null; }
         function loadPrivateMessages(cid) { const b = document.getElementById('privateChatBox'); onValue(ref(db, `private_chats/${cid}`), (s)=>{ b.innerHTML=""; const d=s.val(); if(d) Object.values(d).forEach(m=>{ const isMe=m.sender===currentUserId; b.innerHTML+=`<div class="msg ${isMe?'self':'other'}">${m.text}</div>`; }); b.scrollTop=b.scrollHeight; }); }
         window.sendPrivateText = () => { const t = document.getElementById('pChatMsg').value; if(t&&activeChatId) { push(ref(db, `private_chats/${activeChatId}`), { sender: currentUserId, text: t, timestamp: Date.now() }); document.getElementById('pChatMsg').value=""; } }
-        function loadInbox() { const l = document.getElementById('inboxList'); onValue(ref(db, `users/${currentUserId}/chats`), (s)=>{ l.innerHTML=""; const d=s.val(); if(d) Object.keys(d).forEach(uid => { const c=d[uid]; l.innerHTML+=`<div class="inbox-item" onclick="openChatFromInbox('${uid}','${c.name}','${c.pic}')"><img src="${c.pic}" class="inbox-img"><div><strong>${c.name}</strong><br><small style="color:#777">Chat</small></div></div>`; }); }); }
+        function loadInbox() { const l = document.getElementById('inboxList'); onValue(ref(db, `users/${currentUserId}/chats`), (s)=>{ l.innerHTML=""; const d=s.val(); if(d) Object.keys(d).forEach(uid => { const c=d[uid]; l.innerHTML+=`<div style="display:flex;align-items:center;gap:15px;padding:15px;background:#1a1a1a;border-radius:12px;margin-bottom:10px;cursor:pointer;border:var(--border);" onclick="openChatFromInbox('${uid}','${c.name}','${c.pic}')"><img src="${c.pic}" style="width:45px;height:45px;border-radius:50%;"><div><strong style="color:white;">${c.name}</strong><br><small style="color:#777">Chat</small></div></div>`; }); }); }
         window.openChatFromInbox = (uid, name, pic) => { viewingUser = {id:uid, displayName:name, profilePic:pic}; startPrivateChat(); }
     </script>
 </body>
