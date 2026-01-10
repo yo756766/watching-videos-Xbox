@@ -22,7 +22,7 @@
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; overflow: hidden; height: 100vh; width: 100vw; }
         
-        /* INTRO */
+        /* GENERAL STYLES */
         #intro-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: #000; z-index: 9999;
@@ -33,29 +33,21 @@
         .intro-input { padding: 15px; width: 80%; max-width: 300px; border-radius: 30px; border: 2px solid #333; background: #111; color: white; margin-bottom: 20px; font-size: 1.1rem; text-align: center; outline: none; }
         .enter-btn { background: var(--danger); color: white; padding: 15px 50px; border: none; border-radius: 30px; font-weight: bold; font-size: 1.2rem; cursor: pointer; text-transform: uppercase; }
 
-        /* NAV */
         .app-container { height: calc(100vh - var(--nav-height)); overflow-y: auto; scroll-behavior: smooth; position: relative; }
         .bottom-nav { position: fixed; bottom: 0; width: 100%; height: var(--nav-height); background: #000; display: flex; justify-content: space-around; align-items: center; border-top: 1px solid #222; z-index: 100; }
-        .nav-item { display: flex; flex-direction: column; align-items: center; color: #666; font-size: 0.65rem; cursor: pointer; width: 16%; }
+        .nav-item { display: flex; flex-direction: column; align-items: center; color: #666; font-size: 0.65rem; cursor: pointer; width: 16%; position: relative;}
         .nav-item i { font-size: 1.3rem; margin-bottom: 4px; }
         .nav-item.active { color: white; }
         .nav-upload { width: 40px; height: 28px; background: linear-gradient(to right, #00f3ff, #ff0055); border-radius: 6px; display: grid; place-items: center; color: white; }
+        .nav-badge { position: absolute; top: -2px; right: 10px; width: 8px; height: 8px; background: var(--danger); border-radius: 50%; display: none; }
 
         .view-section { display: none; min-height: 100%; padding-bottom: 20px; }
         .view-section.active { display: block; }
         .top-bar { position: sticky; top: 0; background: rgba(0,0,0,0.9); z-index: 50; padding: 15px; display: flex; justify-content: space-between; align-items: center; }
 
-        /* GENRE TABS (ADDED BACK) */
-        .genre-tabs { 
-            display: flex; gap: 10px; padding: 10px 15px; overflow-x: auto; 
-            background: rgba(0,0,0,0.8); white-space: nowrap; scrollbar-width: none;
-            position: sticky; top: 60px; z-index: 40; border-bottom: 1px solid #222;
-        }
+        .genre-tabs { display: flex; gap: 10px; padding: 10px 15px; overflow-x: auto; background: rgba(0,0,0,0.8); white-space: nowrap; scrollbar-width: none; position: sticky; top: 60px; z-index: 40; border-bottom: 1px solid #222; }
         .genre-tabs::-webkit-scrollbar { display: none; }
-        .genre-pill { 
-            padding: 6px 16px; border-radius: 20px; background: #222; color: #aaa; 
-            font-size: 0.85rem; cursor: pointer; border: 1px solid #333; transition: 0.3s;
-        }
+        .genre-pill { padding: 6px 16px; border-radius: 20px; background: #222; color: #aaa; font-size: 0.85rem; cursor: pointer; border: 1px solid #333; transition: 0.3s; }
         .genre-pill.active { background: #fff; color: #000; font-weight: bold; border-color: #fff; }
 
         /* VIDEO CARDS */
@@ -77,22 +69,15 @@
         .short-info { flex: 1; margin-bottom: 10px; pointer-events: auto; }
         .short-actions { display: flex; flex-direction: column; gap: 20px; align-items: center; padding-bottom: 20px; width: 50px; pointer-events: auto; }
         .action-btn { color: white; text-align: center; font-size: 0.75rem; }
-        .action-btn i { font-size: 1.8rem; display: block; margin-bottom: 5px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5)); }
+        .action-btn i { font-size: 1.8rem; display: block; margin-bottom: 5px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5)); transition: color 0.2s;}
         .mute-indicator { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(0,0,0,0.5); padding: 20px; border-radius: 50%; color: white; font-size: 2rem; pointer-events: none; display:none; }
-
-        /* ADMIN TABS */
-        .cat-tabs { display: flex; gap: 10px; padding: 15px; overflow-x: auto; background: #111; border-bottom: 1px solid #222; }
-        .cat-pill { padding: 8px 16px; border-radius: 20px; background: #333; color: #aaa; white-space: nowrap; font-size: 0.9rem; cursor: pointer; border: 1px solid transparent; }
-        .cat-pill.active { background: var(--primary); color: #000; font-weight: bold; border-color: var(--primary); }
-        #admin-feed { padding-bottom: 20px; }
 
         /* UPLOAD */
         #upload-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 500; display: none; padding: 20px; flex-direction: column; overflow-y: auto; }
         .glow-input { background: #111; border: 1px solid #333; color: white; padding: 15px; border-radius: 8px; width: 100%; margin-bottom: 15px; outline: none; }
         .catbox-btn { background: #2a2a2a; color: var(--primary); text-decoration: none; padding: 12px; border-radius: 8px; text-align: center; font-weight: bold; border: 1px solid var(--primary); margin-bottom: 15px; display: block; }
         select.glow-input { width: 100%; }
-
-        /* TOGGLE SWITCH */
+        
         .toggle-container { display: flex; align-items: center; justify-content: space-between; background: #1a1a1a; padding: 15px; border-radius: 8px; margin-bottom: 15px; border: 1px solid #333; }
         .switch { position: relative; display: inline-block; width: 50px; height: 26px; }
         .switch input { opacity: 0; width: 0; height: 0; }
@@ -111,20 +96,38 @@
         .user-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; padding: 2px; }
         .grid-item { aspect-ratio: 9/16; background: #222; position: relative; cursor: pointer; }
         .grid-item video, .grid-item img { width: 100%; height: 100%; object-fit: cover; }
-        
         .profile-actions { display: flex; gap: 10px; justify-content: center; margin-bottom: 15px; }
         .action-btn-p { padding: 8px 20px; border-radius: 4px; font-weight: 600; cursor: pointer; border: none; }
         .btn-follow { background: var(--primary); color: #000; }
         .btn-msg { background: #333; color: #fff; border: 1px solid #444; }
 
-        /* OVERLAYS */
+        /* NOTIFICATIONS & ADMIN */
+        .notif-item { display: flex; gap: 10px; padding: 15px; border-bottom: 1px solid #222; align-items: center; }
+        .notif-avatar { width: 40px; height: 40px; border-radius: 50%; background: #333; display: grid; place-items: center; font-weight: bold; }
+        .notif-content { flex: 1; font-size: 0.9rem; }
+        #toast-notification { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background: rgba(20, 20, 20, 0.95); border: 1px solid var(--primary); padding: 12px 20px; border-radius: 30px; display: none; align-items: center; gap: 10px; z-index: 2000; width: 90%; max-width: 350px; }
+        #admin-feed { padding-bottom: 20px; }
+        .cat-tabs { display: flex; gap: 10px; padding: 15px; overflow-x: auto; background: #111; border-bottom: 1px solid #222; }
+        .cat-pill { padding: 8px 16px; border-radius: 20px; background: #333; color: #aaa; white-space: nowrap; font-size: 0.9rem; cursor: pointer; border: 1px solid transparent; }
+        .cat-pill.active { background: var(--primary); color: #000; font-weight: bold; border-color: var(--primary); }
+
+        /* PLAYER & COMMENTS */
         #video-overlay, #chat-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 600; display: none; flex-direction: column; }
         .player-header { padding: 10px; display: flex; align-items: center; background: rgba(0,0,0,0.5); position: absolute; top:0; width:100%; z-index: 10; }
         .main-video-el { width: 100%; max-height: 40vh; background: black; margin-top: 50px;}
         .player-details { padding: 20px; overflow-y: auto; flex: 1; }
-        .liked { color: #ff4444 !important; }
+        
+        /* RED LIKE COLOR */
+        .liked { color: #ff0000 !important; }
+        
         .comment-box { margin-top: 20px; border-top: 1px solid #222; padding-top: 15px; }
         .c-item { margin-bottom: 15px; }
+        .c-header { display: flex; gap: 10px; align-items: center; margin-bottom: 4px; }
+        .c-avatar { width: 30px; height: 30px; border-radius: 50%; background: #333; display:grid; place-items:center; font-size:0.8rem; cursor:pointer;}
+        .c-user { font-weight: bold; font-size: 0.85rem; color: #ddd; cursor:pointer; }
+        .c-text { font-size: 0.9rem; margin-left: 40px; color: #fff; }
+        .c-actions { margin-left: 40px; margin-top: 4px; font-size: 0.75rem; color: #777; display: flex; gap: 15px; }
+        .reply-trigger { cursor: pointer; color: var(--primary); }
         
         #chat-messages { flex: 1; overflow-y: auto; padding: 15px; display: flex; flex-direction: column; gap: 10px; }
         .message-bubble { max-width: 70%; padding: 10px 15px; border-radius: 15px; font-size: 0.9rem; }
@@ -142,11 +145,16 @@
         <button class="enter-btn" onclick="enterApp()">ENTER APP</button>
     </div>
 
+    <div id="toast-notification">
+        <i class="fas fa-bell" style="color:var(--primary)"></i>
+        <span id="toast-msg" style="color:white; font-size:0.9rem;">Notification</span>
+    </div>
+
     <div class="bottom-nav">
         <div class="nav-item active" onclick="switchTab('home')"><i class="fas fa-home"></i> <span>Home</span></div>
         <div class="nav-item" onclick="switchTab('shorts')"><i class="fas fa-compass"></i> <span>Shorts</span></div>
         <div class="nav-item" onclick="openUpload()"><div class="nav-upload"><i class="fas fa-plus"></i></div></div>
-        <div class="nav-item" onclick="switchTab('admin')"><i class="fas fa-folder-open"></i> <span>Admin</span></div>
+        <div class="nav-item" onclick="switchTab('notifications')"><i class="fas fa-bell"></i><span class="nav-badge" id="notif-badge"></span><span>Alerts</span></div>
         <div class="nav-item" onclick="viewUserProfile(currentUser)"><i class="fas fa-user"></i> <span>Profile</span></div>
     </div>
 
@@ -156,21 +164,22 @@
                 <div style="font-weight:700; font-family:'Poppins'">MiniTube Pro</div>
                 <i class="fas fa-search" style="font-size:1.2rem;"></i>
             </div>
-            
-            <!-- GENRE TABS (ADDED BACK) -->
             <div class="genre-tabs">
                 <div class="genre-pill active" onclick="filterHome('All', this)">All</div>
-                <div class="genre-pill" onclick="filterHome('18+', this)">18+</div>
+                <div class="genre-pill" onclick="filterHome('18+', this)" style="color:red; border-color:red;">18+</div>
+                <div class="genre-pill" onclick="filterHome('Music', this)">Music</div>
                 <div class="genre-pill" onclick="filterHome('Funny', this)">Funny</div>
                 <div class="genre-pill" onclick="filterHome('Memes', this)">Memes</div>
                 <div class="genre-pill" onclick="filterHome('Movie', this)">Movie</div>
             </div>
-
             <div id="home-feed" style="padding-bottom: 80px;"></div>
         </div>
 
-        <div id="shorts-view" class="view-section">
-            <div style="padding:20px; text-align:center;">Loading Shorts...</div>
+        <div id="shorts-view" class="view-section"><div style="padding:20px; text-align:center;">Loading Shorts...</div></div>
+        
+        <div id="notifications-view" class="view-section">
+            <div class="top-bar"><h3>Notifications</h3></div>
+            <div id="notif-list" style="padding-bottom:80px;"></div>
         </div>
 
         <div id="admin-view" class="view-section">
@@ -184,11 +193,7 @@
         </div>
 
         <div id="profile-view" class="view-section">
-            <div class="top-bar" id="profile-top-bar">
-                <i class="fas fa-arrow-left" onclick="switchTab('home')" style="display:none;" id="p-back-btn"></i>
-                <h3 id="p-header-title">Profile</h3>
-                <div></div>
-            </div>
+            <div class="top-bar" id="profile-top-bar"><i class="fas fa-arrow-left" onclick="switchTab('home')" style="display:none;" id="p-back-btn"></i><h3 id="p-header-title">Profile</h3><div></div></div>
             <div class="profile-header">
                 <div class="p-avatar-lg" id="p-avatar-txt">U</div>
                 <div class="p-name" id="p-username-display">Username</div>
@@ -215,43 +220,26 @@
         <input type="url" id="u-url" class="glow-input" placeholder="Paste Video URL here...">
         <input type="text" id="u-title" class="glow-input" placeholder="Title / Caption">
         
-        <!-- THUMBNAIL TOGGLE -->
         <div class="toggle-container">
             <span style="color:white; font-weight:600;">Custom Thumbnail</span>
-            <label class="switch">
-                <input type="checkbox" id="thumb-toggle" onchange="toggleThumbInput()">
-                <span class="slider"></span>
-            </label>
+            <label class="switch"><input type="checkbox" id="thumb-toggle" onchange="toggleThumbInput()"><span class="slider"></span></label>
         </div>
-        <div id="thumb-input-box" style="display:none;">
-            <input type="url" id="u-thumb" class="glow-input" placeholder="Paste Image URL here...">
-        </div>
+        <div id="thumb-input-box" style="display:none;"><input type="url" id="u-thumb" class="glow-input" placeholder="Paste Image URL here..."></div>
 
-        <!-- USER CONTENT TYPE SELECTION (ADDED BACK) -->
         <label style="color:#aaa; font-size:0.8rem; margin-left:5px;">Content Type</label>
         <select id="u-genre" class="glow-input">
-            <option value="General">General</option>
-            <option value="18+">18+</option>
-            <option value="Funny">Funny</option>
-            <option value="Memes">Memes</option>
-            <option value="Movie">Movie</option>
+            <option value="18+">18+</option><option value="General">General</option><option value="Music">Music</option><option value="Funny">Funny</option><option value="Memes">Memes</option><option value="Movie">Movie</option>
         </select>
 
         <div id="admin-cat-select" style="display:none;">
             <label style="color:var(--primary); font-size:0.8rem; margin-bottom:5px; display:block;">Admin Category</label>
-            <select id="u-category" class="glow-input">
-                <option value="General">General</option>
-                <option value="Aroob Jatoi">Aroob Jatoi</option>
-                <option value="Nikku Vlogz">Nikku Vlogz</option>
-            </select>
+            <select id="u-category" class="glow-input"><option value="General">General</option><option value="Aroob Jatoi">Aroob Jatoi</option><option value="Nikku Vlogz">Nikku Vlogz</option></select>
         </div>
-        <select id="u-type" class="glow-input">
-            <option value="short">Short (Vertical)</option>
-            <option value="long">Long Video</option>
-        </select>
+        <select id="u-type" class="glow-input"><option value="short">Short (Vertical)</option><option value="long">Long Video</option></select>
         <button onclick="postVideoLink()" style="background:var(--primary); padding:15px; border:none; border-radius:8px; font-weight:bold; width:100%; font-size:1.1rem; margin-top:10px;">POST VIDEO</button>
     </div>
 
+    <!-- PLAYER -->
     <div id="video-overlay">
         <div class="player-header"><i class="fas fa-chevron-down" onclick="closePlayer()" style="color:white; padding:15px; cursor:pointer;"></i></div>
         <video id="main-player" class="main-video-el" controls playsinline></video>
@@ -300,6 +288,7 @@
         let currentVideoUploader = null;
         let viewingProfileUser = null;
         let currentChatUser = null;
+        let pageLoadTime = Date.now();
 
         function enterApp() {
             const name = document.getElementById('user-name-in').value.trim();
@@ -331,19 +320,52 @@
         function initApp() {
             document.getElementById('admin-cat-select').style.display = currentUser === 'Admin' ? 'block' : 'none';
             fetchVideos();
+            listenNotifications();
         }
 
         function switchTab(tab) {
             document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
             document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
             document.getElementById(`${tab}-view`).classList.add('active');
-            const map = { 'home':0, 'shorts':1, 'admin':3, 'profile':4 };
-            if(map[tab] !== undefined && tab !== 'profile') document.querySelectorAll('.nav-item')[map[tab]].classList.add('active');
-            if(tab === 'profile') { viewUserProfile(currentUser); document.querySelectorAll('.nav-item')[4].classList.add('active'); }
+            
+            const map = { 'home':0, 'shorts':1, 'notifications':3, 'profile':4 };
+            if(currentUser === 'Admin' && tab === 'admin') {
+                document.getElementById('admin-view').classList.add('active');
+                document.querySelectorAll('.nav-item')[3].classList.add('active');
+                document.querySelectorAll('.nav-item')[3].innerHTML = `<i class="fas fa-folder-open"></i> <span>Admin</span>`;
+            } else if (tab === 'notifications') {
+                document.getElementById('notifications-view').classList.add('active');
+                document.querySelectorAll('.nav-item')[3].classList.add('active');
+                document.getElementById('notif-badge').style.display = 'none';
+            } else {
+                if(map[tab] !== undefined) document.querySelectorAll('.nav-item')[map[tab]].classList.add('active');
+            }
+
+            if(tab === 'profile') { viewUserProfile(currentUser); }
             if(tab === 'shorts') playVisibleShort(); else pauseAllShorts();
         }
         function playVisibleShort() {}
 
+        // NOTIFICATIONS
+        function sendNotification(targetUser, type, message) {
+            if(targetUser === currentUser) return;
+            db.ref(`notifications/${targetUser}`).push({ type: type, sender: currentUser, message: message, timestamp: Date.now(), read: false });
+        }
+        function listenNotifications() {
+            db.ref(`notifications/${currentUser}`).limitToLast(20).on('child_added', snap => {
+                const notif = snap.val();
+                const list = document.getElementById('notif-list');
+                const div = document.createElement('div'); div.className = 'notif-item';
+                div.innerHTML = `<div class="notif-avatar" style="color:var(--primary)"><i class="fas fa-bell"></i></div><div class="notif-content"><b>${notif.sender}</b> ${notif.message}<span class="notif-time">Just now</span></div>`;
+                list.prepend(div);
+                if(notif.timestamp > pageLoadTime) {
+                    const t = document.getElementById('toast-notification'); document.getElementById('toast-msg').innerText = `${notif.sender}: ${notif.message}`; t.style.display = 'flex'; setTimeout(() => { t.style.display = 'none'; }, 3000);
+                    document.getElementById('notif-badge').style.display = 'block';
+                }
+            });
+        }
+
+        // UPLOAD
         function openUpload() {
             db.ref('users/' + currentUser).once('value', snap => {
                 if(snap.exists() && snap.val().banned) alert("Restricted.");
@@ -351,76 +373,47 @@
             });
         }
         function closeUpload() { document.getElementById('upload-overlay').style.display = 'none'; }
-        
-        function toggleThumbInput() {
-            const isChecked = document.getElementById('thumb-toggle').checked;
-            document.getElementById('thumb-input-box').style.display = isChecked ? 'block' : 'none';
-        }
+        function toggleThumbInput() { const isChecked = document.getElementById('thumb-toggle').checked; document.getElementById('thumb-input-box').style.display = isChecked ? 'block' : 'none'; }
 
         function postVideoLink() {
             const url = document.getElementById('u-url').value;
             const title = document.getElementById('u-title').value;
             const type = document.getElementById('u-type').value;
-            let genre = document.getElementById('u-genre').value; // Added genre capture
+            let genre = document.getElementById('u-genre').value;
             let cat = 'General';
             if(currentUser === 'Admin') cat = document.getElementById('u-category').value;
-            
             let thumbUrl = "";
             if(document.getElementById('thumb-toggle').checked) thumbUrl = document.getElementById('u-thumb').value;
 
-            if(!url || !title) return alert("URL and Title required!");
-            
+            if(!url || !title) return alert("URL & Title required!");
             db.ref('videos').push({
-                title: title, videoUrl: url, type: type, category: cat, genre: genre, uploader: currentUser, 
-                timestamp: Date.now(), views: 0, likes: 0, thumbnail: thumbUrl
+                title: title, videoUrl: url, type: type, category: cat, genre: genre, uploader: currentUser, timestamp: Date.now(), views: 0, likes: 0, thumbnail: thumbUrl
             }).then(() => { alert("Posted!"); closeUpload(); });
         }
 
+        // DATA
         function fetchVideos() {
             db.ref('videos').limitToLast(20).on('value', snap => {
                 const data = snap.val(); if(!data) return;
                 allVideos = Object.entries(data).map(([k,v]) => ({id:k, ...v})).reverse();
-                filterHome(homeFilter); // Use current filter
+                filterHome(homeFilter); 
                 renderShorts(allVideos.filter(v => v.type === 'short' && v.uploader !== 'Admin'));
                 filterAdmin(currentCategory);
             });
         }
 
-        // --- FILTER FUNCTION FOR HOME (GENRES) ---
         function filterHome(genre, btn) {
             homeFilter = genre;
             if(btn) { document.querySelectorAll('.genre-pill').forEach(e=>e.classList.remove('active')); btn.classList.add('active'); }
-            
             const c = document.getElementById('home-feed'); c.innerHTML = "";
-            
-            // Base filter: Long video + Not Admin
             let videos = allVideos.filter(v => v.type === 'long' && v.uploader !== 'Admin');
-            
-            if(genre !== 'All') {
-                videos = videos.filter(v => v.genre === genre);
-            }
-            
+            if(genre !== 'All') videos = videos.filter(v => v.genre === genre);
             if(videos.length === 0) return c.innerHTML = "<p style='color:#555; text-align:center; padding:20px;'>No videos found.</p>";
 
             videos.forEach(v => {
-                let content = v.thumbnail 
-                    ? `<img src="${v.thumbnail}" class="thumb-img">`
-                    : `<video src="${v.videoUrl}#t=1.0" class="thumb-img" muted onmouseover="this.play()" onmouseout="this.pause();this.currentTime=1;"></video>`;
-
+                let content = v.thumbnail ? `<img src="${v.thumbnail}" class="thumb-img">` : `<video src="${v.videoUrl}#t=1.0" class="thumb-img" muted onmouseover="this.play()" onmouseout="this.pause();this.currentTime=1;"></video>`;
                 const div = document.createElement('div'); div.className = 'video-card'; div.onclick = () => openPlayer(v);
-                div.innerHTML = `
-                    <div class="thumbnail-container">
-                        ${content}
-                        <div class="view-badge"><i class="fas fa-eye"></i> ${v.views || 0}</div>
-                        <div style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); color:white; opacity:0.8; font-size:2rem; pointer-events:none;"><i class="fas fa-play-circle"></i></div>
-                    </div>
-                    <div class="meta">
-                        <div class="avatar" onclick="event.stopPropagation(); viewUserProfile('${v.uploader}')">${(v.uploader||'A').charAt(0)}</div>
-                        <div class="details">
-                            <div class="v-title">${v.title}</div>
-                            <div class="v-sub">${v.uploader} • <span style="color:var(--primary)">${v.genre || 'General'}</span></div>
-                        </div>
-                    </div>`;
+                div.innerHTML = `<div class="thumbnail-container">${content}<div class="view-badge"><i class="fas fa-eye"></i> ${v.views || 0}</div></div><div class="meta"><div class="avatar" onclick="event.stopPropagation(); viewUserProfile('${v.uploader}')">${(v.uploader||'A').charAt(0)}</div><div class="details"><div class="v-title">${v.title}</div><div class="v-sub">${v.uploader} • <span style="color:var(--primary)">${v.genre || 'General'}</span></div></div></div>`;
                 c.appendChild(div);
             });
         }
@@ -433,7 +426,6 @@
             
             filtered.forEach(v => {
                 let content = v.thumbnail ? `<img src="${v.thumbnail}" class="thumb-img">` : `<video src="${v.videoUrl}#t=1.0" class="thumb-img" muted onmouseover="this.play()" onmouseout="this.pause();this.currentTime=1;"></video>`;
-                
                 const div = document.createElement('div'); div.className = 'video-card'; div.onclick = () => openPlayer(v);
                 div.innerHTML = `<div class="thumbnail-container">${content}<div class="view-badge"><i class="fas fa-eye"></i> ${v.views||0}</div></div><div class="meta"><div class="avatar">${(v.uploader||'A').charAt(0)}</div><div class="details"><div class="v-title">${v.title}</div><div class="v-sub">${v.uploader} • ${v.category}</div></div></div>`;
                 grid.appendChild(div);
@@ -449,49 +441,55 @@
             setupShortsObserver();
         }
 
+        // PLAYER & LIKES
         function openPlayer(v) {
             currentVideoId = v.id; currentVideoUploader = v.uploader;
             document.getElementById('video-overlay').style.display = 'flex';
             const p = document.getElementById('main-player'); p.src = v.videoUrl; p.play();
             document.getElementById('ov-title').innerText = v.title; 
             
-            const videoRef = db.ref(`videos/${v.id}`);
-            videoRef.transaction((post) => {
-                if (post) {
-                    if (!post.viewedBy) post.viewedBy = {};
-                    if (!post.viewedBy[currentUser]) {
-                        post.views = (post.views || 0) + 1;
-                        post.viewedBy[currentUser] = true;
-                    }
-                }
-                return post;
-            });
+            // Like State Check
+            const likeIcon = document.getElementById('ov-like-icon');
+            if(likedVideos.includes(v.id)) likeIcon.classList.add('liked'); else likeIcon.classList.remove('liked');
+            document.getElementById('ov-likes').innerText = v.likes || 0;
 
+            const videoRef = db.ref(`videos/${v.id}`);
+            videoRef.transaction((post) => { if (post) { if (!post.viewedBy) post.viewedBy = {}; if (!post.viewedBy[currentUser]) { post.views = (post.views || 0) + 1; post.viewedBy[currentUser] = true; } } return post; });
             loadComments(v.id);
         }
         function closePlayer() { document.getElementById('main-player').pause(); document.getElementById('video-overlay').style.display = 'none'; }
         
-        function postComment() { const i=document.getElementById('c-input'); if(i.value) db.ref(`videos/${currentVideoId}/comments`).push({user:currentUser, text:i.value, time:Date.now()}); i.value=""; }
-        function loadComments(id) { db.ref(`videos/${id}/comments`).on('value',s=>{ const l=document.getElementById('comment-list'); l.innerHTML=""; if(s.val()) Object.values(s.val()).forEach(c=>{ l.innerHTML+=`<div class="c-item"><div class="c-header"><div class="c-avatar">${c.user.charAt(0)}</div><div class="c-user">${c.user}</div></div><div class="c-text">${c.text}</div></div>` }) }); }
+        function postComment() { 
+            const i=document.getElementById('c-input'); if(i.value) { 
+                db.ref(`videos/${currentVideoId}/comments`).push({user:currentUser, text:i.value, time:Date.now()}); 
+                sendNotification(currentVideoUploader, 'comment', 'commented on your video'); i.value=""; 
+            } 
+        }
         
+        function loadComments(id) { 
+            db.ref(`videos/${id}/comments`).on('value',s=>{ 
+                const l=document.getElementById('comment-list'); l.innerHTML=""; 
+                if(s.val()) Object.values(s.val()).forEach(c=>{ 
+                    l.innerHTML+=`<div class="c-item"><div class="c-header"><div class="c-avatar" onclick="viewUserProfile('${c.user}')">${c.user.charAt(0)}</div><div class="c-user" onclick="viewUserProfile('${c.user}')">${c.user}</div></div><div class="c-text">${c.text}</div><div class="c-actions"><span class="reply-trigger" onclick="setupReply('${c.user}')">Reply</span></div></div>` 
+                }) 
+            }); 
+        }
+        function setupReply(user) { const i = document.getElementById('c-input'); i.value = `@${user} `; i.focus(); }
+
         function viewUserProfile(u) {
             viewingProfileUser=u; document.querySelectorAll('.view-section').forEach(e=>e.classList.remove('active')); document.getElementById('profile-view').classList.add('active');
             document.getElementById('p-username-display').innerText="@"+u; document.getElementById('p-avatar-txt').innerText=u.charAt(0);
             document.getElementById('p-back-btn').style.display=u===currentUser?'none':'block';
-            
             const ad=document.getElementById('p-actions'); ad.innerHTML="";
             if(u!==currentUser) db.ref(`users/${currentUser}/following/${u}`).on('value',s=>{ const f=s.exists(); ad.innerHTML=`<button class="action-btn-p btn-follow" onclick="toggleFollow('${u}')">${f?'Unfollow':'Follow'}</button>`+(f?`<button class="action-btn-p btn-msg" onclick="openChat('${u}')">Message</button>`:''); });
             else ad.innerHTML=`<button class="action-btn-p btn-msg">Edit</button>`;
             
             const vids = allVideos.filter(v=>v.uploader===u);
             const grid = document.getElementById('my-videos-grid'); grid.innerHTML="";
-            vids.forEach(v=>{ 
-                let content = v.thumbnail ? `<img src="${v.thumbnail}">` : `<video src="${v.videoUrl}#t=1.0"></video>`;
-                grid.innerHTML+=`<div class="grid-item" onclick="openPlayer({videoUrl:'${v.videoUrl}', title:'${v.title}', id:'${v.id}', likes:${v.likes}, uploader:'${v.uploader}'})">${content}</div>` 
-            });
+            vids.forEach(v=>{ let content = v.thumbnail ? `<img src="${v.thumbnail}">` : `<video src="${v.videoUrl}#t=1.0"></video>`; grid.innerHTML+=`<div class="grid-item" onclick="openPlayer({videoUrl:'${v.videoUrl}', title:'${v.title}', id:'${v.id}', likes:${v.likes}, uploader:'${v.uploader}'})">${content}</div>` });
             loadProfileStats(u);
         }
-        function toggleFollow(u) { const r=db.ref(`users/${currentUser}/following/${u}`); r.once('value',s=>s.exists()?r.remove():r.set(true)); }
+        function toggleFollow(u) { const r=db.ref(`users/${currentUser}/following/${u}`); r.once('value',s=> { if(s.exists()) { r.remove(); } else { r.set(true); sendNotification(u, 'follow', 'started following you'); } }); }
         function loadProfileStats(u) {
             db.ref(`users/${u}/followers`).on('value',s=>document.getElementById('p-followers').innerText=s.numChildren());
             db.ref(`users/${u}/following`).on('value',s=>document.getElementById('p-following').innerText=s.numChildren());
@@ -502,15 +500,38 @@
 
         function openChat(u) { currentChatUser=u; document.getElementById('chat-overlay').style.display='flex'; document.getElementById('chat-with-user').innerText=u; loadChat(u); }
         function closeChat() { document.getElementById('chat-overlay').style.display='none'; }
-        function sendMessage() { const i=document.getElementById('chat-input'); if(i.value) { db.ref(`chats/${[currentUser,currentChatUser].sort().join("_")}`).push({sender:currentUser, text:i.value}); i.value=""; } }
+        function sendMessage() { const i=document.getElementById('chat-input'); if(i.value) { db.ref(`chats/${[currentUser,currentChatUser].sort().join("_")}`).push({sender:currentUser, text:i.value}); sendNotification(currentChatUser, 'message', 'sent you a message'); i.value=""; } }
         function loadChat(u) { db.ref(`chats/${[currentUser,u].sort().join("_")}`).on('value',s=>{ const d=document.getElementById('chat-messages'); d.innerHTML=""; if(s.val()) Object.values(s.val()).forEach(m=>{ d.innerHTML+=`<div class="message-bubble ${m.sender===currentUser?'msg-mine':'msg-other'}">${m.text}</div>` }); d.scrollTop=d.scrollHeight; }); }
 
         function toggleSound(v) { v.muted = !v.muted; v.parentElement.querySelector('.mute-indicator').style.display = v.muted ? 'none' : 'block'; setTimeout(()=>v.parentElement.querySelector('.mute-indicator').style.display='none',1000); }
         function setupShortsObserver() { const obs=new IntersectionObserver(e=>{e.forEach(entry=>{const v=entry.target.querySelector('video'); if(entry.isIntersecting){v.play().catch(()=>{}); incrementView(entry.target.dataset.id);} else{v.pause();v.currentTime=0;}})},{threshold:0.5}); document.querySelectorAll('.short-container').forEach(e=>obs.observe(e)); }
         function pauseAllShorts() { document.querySelectorAll('.short-video').forEach(v=>v.pause()); }
         function incrementView(id) { db.ref(`videos/${id}/views`).transaction(v=>(v||0)+1); }
-        function toggleLike(id) { const l=likedVideos.includes(id); db.ref(`videos/${id}/likes`).transaction(c=>l?(c||0)-1:(c||0)+1,(e,c)=>{ if(c){ l?likedVideos=likedVideos.filter(x=>x!==id):likedVideos.push(id); localStorage.setItem('mt_liked',JSON.stringify(likedVideos)); const el=document.getElementById(`like-${id}`); if(el) el.classList.toggle('liked'); } }); }
-        function handleLike() { toggleLike(currentVideoId); document.getElementById('ov-like-icon').classList.toggle('liked'); }
+        
+        function toggleLike(id) { 
+            const l=likedVideos.includes(id); 
+            db.ref(`videos/${id}/likes`).transaction(c=>l?(c||0)-1:(c||0)+1,(e,c)=>{ 
+                if(c){ 
+                    l?likedVideos=likedVideos.filter(x=>x!==id):likedVideos.push(id); 
+                    localStorage.setItem('mt_liked',JSON.stringify(likedVideos)); 
+                    
+                    const el=document.getElementById(`like-${id}`); if(el) el.classList.toggle('liked'); 
+                    
+                    // Also update player like icon if open
+                    if(document.getElementById('video-overlay').style.display === 'flex' && currentVideoId === id) {
+                        const playerLike = document.getElementById('ov-like-icon');
+                        l ? playerLike.classList.remove('liked') : playerLike.classList.add('liked');
+                        document.getElementById('ov-likes').innerText = e.snapshot.val();
+                    }
+
+                    if(!l) { 
+                        const vid = allVideos.find(v=>v.id===id);
+                        if(vid) sendNotification(vid.uploader, 'like', 'liked your video');
+                    }
+                } 
+            }); 
+        }
+        function handleLike() { toggleLike(currentVideoId); }
     </script>
 </body>
 </html>
